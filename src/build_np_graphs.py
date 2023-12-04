@@ -16,7 +16,7 @@ def make_pickle(name, info):
 
 
 if __name__ == "__main__":
-    pdb_ids = [x.split("_stripped_complex_ambpdb_08_28_23_ligand.xyz")[0] for x in glob.glob("*ligand.xyz")]
+    pdb_ids = [x.split("_ligand.xyz")[0] for x in glob.glob("*ligand.xyz")]
     edges_dict, adjacency_dict, nodes_dict = {}, {}, {}
 
     for pdb_id in pdb_ids:

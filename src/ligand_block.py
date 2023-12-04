@@ -20,17 +20,32 @@ def get_molecule_properties(filename):
     return mol_object
 
 
+def extract_single_property(regex_pattern, xtb_str, default=0.0):
+    match = re.search(regex_pattern, xtb_str)
+    return float(match.group(1)) if match else default
+
+
 def extract_xtb_features(xtb_str):
-
-
-# Extract various XTB-related features
-# ...
+    properties = [
+        extract_single_property(r'\(HOMO\):\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'\(LUMO\):\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'TOTAL ENERGY\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'GRADIENT NORM\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'HOMO-LUMO GAP\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'isotropic ES\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'anisotropic ES\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'anisotropic XC\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'dispersion\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'repulsion energy\s*:\s*([\d.-]+)', xtb_str),
+        extract_single_property(r'molecular quadrupole\s*:\s*([\d.-]+)', xtb_str)
+    ]
+    return np.array(properties)
 
 
 class LigandBlock:
     def __init__(self, pdb_id):
-        xyz_file = f"{pdb_id}_stripped_complex_ambpdb_08_28_23_ligand.xyz"
-        xtb_file = f"{pdb_id}_stripped_complex_ambpdb_08_28_23_ligand.out"
+        xyz_file = f"{pdb_id}_ligand.xyz"
+        xtb_file = f"{pdb_id}_ligand_xtb2.out"
 
         mol = get_molecule_properties(xyz_file)
         rdkit_features = np.array([
@@ -57,9 +72,9 @@ if __name__ == '__main__':
         try:
             assert os.path.isfile(f"FINAL_RESULTS_MMGBSA_{pdb_id}.dat")
             assert os.path.isfile(f"FINAL_RESULTS_MMGBSA_per_residue_{pdb_id}_interaction.txt")
-            assert os.path.isfile(f"{pdb_id}_stripped_complex_ambpdb.pdb")
-            assert os.path.isfile(f"{pdb_id}_stripped_complex_ambpdb_08_28_23_ligand.xyz")
-            assert os.path.isfile(f"{pdb_id}_stripped_complex_ambpdb_08_28_23_ligand.out")
+            assert os.path.isfile(f"{pdb_id}_complex.pdb")
+            assert os.path.isfile(f"{pdb_id}_ligand.xyz")
+            assert os.path.isfile(f"{pdb_id}_ligand_xtb2.out")
             present_pdb_ids.append(pdb_id)
         except AssertionError:
             pass
