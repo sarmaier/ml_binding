@@ -3,7 +3,7 @@ from datetime import date
 import glob
 import numpy as np
 import pickle
-from make_interaction_gbsa_block import GbsaInteraction
+from interaction_gbsa_block import GbsaInteraction
 import logging
 
 logging.basicConfig(filename='processing_logs.log', level=logging.ERROR)
