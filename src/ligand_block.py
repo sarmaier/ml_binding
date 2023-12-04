@@ -66,7 +66,7 @@ if __name__ == '__main__':
     parser.add_argument("PDB_ID")
     args = parser.parse_args()
     pdb_ids = [getattr(args, arg) for arg in vars(args)]
-
+    print(pdb_ids)
     present_pdb_ids = []
     for pdb_id in pdb_ids:
         try:
