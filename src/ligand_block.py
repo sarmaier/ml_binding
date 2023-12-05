@@ -11,9 +11,6 @@ from xyz2mol import xyz2mol, read_xyz_file
 np.set_printoptions(threshold=sys.maxsize)
 
 
-class ProcessingError(Exception):
-    pass
-
 def get_molecule_properties(filename):
     a_num, charge, xyz_coord = read_xyz_file(filename)
     charged_fragments = True
@@ -44,6 +41,10 @@ def extract_xtb_features(xtb_str):
         extract_single_property(r'(-?\d+?\.\d+)\nmolecular quadrupole \(traceless\)', xtb_str)
     ]
     return np.array(properties)
+
+
+class ProcessingError(Exception):
+    pass
 
 
 class LigandBlock:

@@ -7,19 +7,22 @@ import argparse
 
 
 def parse_gbsa_block(str_, start_keyword, end_keyword):
-    block = [x for x in re.findall(f"{start_keyword}:(.*?){end_keyword}", str_, re.DOTALL)[0].split("\n") if x][2:]
+    block = [x for x in re.findall(f"{start_keyword}(.*?){end_keyword}", str_, re.DOTALL)[0].split("\n") if x][3:]
     block = [[float(x) for x in y.split(" ") if "." in x][0] for y in block]
-    block = block[:4] + block[6:]
-    return block
+    return block[:4] + block[6:]
+
+
+class ProcessingError(Exception):
+    pass
 
 
 class GbsaComplexBlock():
     def __init__(self, id):
         interaction_string = open(f"FINAL_RESULTS_MMGBSA_{id}.dat").read()
-        delta = parse_gbsa_block(interaction_string, "Difference", "\n\n------")
-        ligand = parse_gbsa_block(interaction_string, "Ligand", "Difference")
-        receptor = parse_gbsa_block(interaction_string, "Receptor", "Ligand")
-        comp = parse_gbsa_block(interaction_string, "Complex", "Receptor")
+        delta = parse_gbsa_block(interaction_string, "Differences", "\n\n------")
+        ligand = parse_gbsa_block(interaction_string, "Ligand:", "Difference")
+        receptor = parse_gbsa_block(interaction_string, "Receptor:", "Ligand:")
+        comp = parse_gbsa_block(interaction_string, "Complex:", "Receptor:")
         self.bind_properties = np.array(delta + ligand + receptor + comp)
 
 
@@ -35,8 +38,8 @@ if __name__ == '__main__':
     else:
         try:
             complex_gbsa = GbsaComplexBlock(pdb_id)
-        except Exception as e:
-            print(f"Issue with processing PDB ID {pdb_id}: {e}")
+        except ProcessingError:
+            print(f"Issue with processing {pdb_id}")
             exit()
 
     today = date.today()
