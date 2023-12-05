@@ -1,21 +1,21 @@
 import glob
 import numpy as np
 import pandas as pd
-import pickle
+import json
 import networkx as nx
 from sklearn.model_selection import train_test_split
 
 
-# Function to save data as a pickle
-def save_pickle(name, info):
-    with open(name + '.pickle', 'wb') as pickle_out:
-        pickle.dump(info, pickle_out)
+# Function to save data as a json
+def make_json(name, info):
+    with open(name + '.json', 'w') as json_out:
+        json.dump(info, json_out)
 
 
 # Function to load data from a pickle
-def load_pickle(name):
-    with open(name, 'rb') as file:
-        return pickle.load(file)
+def load_json(name):
+    with open(name, 'r') as file:
+        return json.load(file)
 
 
 # Function to calculate mean and standard deviation of node attributes
@@ -43,20 +43,20 @@ def normalize_nodes(array, means, stds):
 
 
 # Function to create CSV files for edges and features
-def make_csv(pdb_id, graph):
+def make_csv(_pdb_id, graph):
     e = graph.edges
-    features = np.array([graph.nodes[node]['feature_array'] for node in graph.nodes])
+    features = np.array([graph.nodes[_node]['feature_array'] for _node in graph.nodes])
     n_features = len(graph.nodes[0]['feature_array'])
     edges_pd = pd.DataFrame(e, columns=['node_1', 'node_2'])
     features_pd = pd.DataFrame(features, columns=['x_' + str(i) for i in range(n_features)])
-    edges_pd.to_csv(pdb_id + "_edges.csv", index=False)
-    features_pd.to_csv(pdb_id + "_features.csv", index=False)
+    edges_pd.to_csv(_pdb_id + "_edges.csv", index=False)
+    features_pd.to_csv(_pdb_id + "_features.csv", index=False)
 
 
 # Main functionality
 if __name__ == "__main__":
-    adjacency = load_pickle("numpy_adjacency.pickle")
-    nodes = load_pickle("numpy_nodes.pickle")
+    adjacency = load_json("numpy_adjacency.json")
+    nodes = load_json("numpy_nodes.json")
 
     # Splitting dataset into train and test
     train_pdb_ids, test_pdb_ids = train_test_split(list(adjacency), train_size=0.9)
