@@ -13,16 +13,16 @@ def make_json(name, info):
 
 
 if __name__ == "__main__":
-    pdb_ids = [x.split("_ligand.xyz")[0] for x in glob.glob("*ligand.xyz")]
+    pdb_ids = [x.split("_ligand.xyz")[0] for x in glob.glob("3nkk_ligand.xyz")]
     edges_dict, adjacency_dict, nodes_dict = {}, {}, {}
 
     for pdb_id in pdb_ids:
         print("Working on... " + str(pdb_id))
         try:
             interaction_block = GbsaInteraction(pdb_id)
-            edges_dict[pdb_id] = interaction_block.edges
-            adjacency_dict[pdb_id] = interaction_block.adjacency
-            nodes_dict[pdb_id] = interaction_block.nodes
+            edges_dict[pdb_id] = interaction_block.edges.tolist()
+            adjacency_dict[pdb_id] = interaction_block.adjacency.tolist()
+            nodes_dict[pdb_id] = interaction_block.nodes.tolist()
 
         except FileNotFoundError:
             logging.error(f"File not found for {pdb_id}")
