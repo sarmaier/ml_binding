@@ -1,18 +1,15 @@
-import traceback
 from datetime import date
 import glob
-import numpy as np
-import pickle
+import json
 from interaction_gbsa_block import GbsaInteraction
 import logging
 
 logging.basicConfig(filename='processing_logs.log', level=logging.ERROR)
 
 
-def make_pickle(name, info):
-    pickle_out = open(name + '.pickle', 'wb')
-    pickle.dump(info, pickle_out)
-    pickle_out.close()
+def make_json(name, info):
+    with open(name + '.json', 'w') as json_out:
+        json.dump(info, json_out)
 
 
 if __name__ == "__main__":
@@ -33,6 +30,6 @@ if __name__ == "__main__":
             logging.error(f"Error processing {pdb_id}: {str(e)}")
             exit()
     today = date.today()
-    make_pickle('numpy_adjacency_' + str(today), adjacency_dict)
-    make_pickle('numpy_edges_' + str(today), edges_dict)
-    make_pickle('numpy_nodes_' + str(today), nodes_dict)
+    make_json('numpy_adjacency_' + str(today), adjacency_dict)
+    make_json('numpy_edges_' + str(today), edges_dict)
+    make_json('numpy_nodes_' + str(today), nodes_dict)
