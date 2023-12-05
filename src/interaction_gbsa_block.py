@@ -1,4 +1,5 @@
 import os
+import re
 import numpy as np
 from datetime import date
 import time
@@ -50,11 +51,14 @@ def parse_pairwise(str_):
     return parsed_int
 
 
-class GbsaInteraction:
-    def __init__(self, id):
-        int_string = open("FINAL_RESULTS_MMGBSA_per_residue_" + id + "_interaction.txt").read()
-        pdb_list = open(id + "_stripped_complex_ambpdb.pdb", "r").read().split('\n')
+class ProcessingError(Exception):
+    pass
 
+
+class GbsaInteraction:
+    def __init__(self, _id):
+        int_string = open("FINAL_RESULTS_MMGBSA_per_residue_" + _id + "_interaction.txt").read()
+        pdb_list = open(_id + "_complex.pdb", "r").read().split('\n')
         self.int = parse_pairwise(int_string)
         self.ca_coord, self.alpha_dist = alpha_c_distance(pdb_list)
         self.n_ca = len(list(self.alpha_dist))
@@ -104,3 +108,23 @@ class GbsaInteraction:
         diagrams = vr.fit_transform(ca_matrix)
         features = PersistenceEntropy().fit_transform(diagrams).flatten()
         return features
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("PDB_ID", help="PDB ID of the molecule")
+    args = parser.parse_args()
+
+    pdb_id = args.PDB_ID
+    if not os.path.isfile(f"FINAL_RESULTS_MMGBSA_per_residue_{pdb_id}_interaction.txt"):
+        print(f"Required files not found for PDB ID {pdb_id}")
+    else:
+        try:
+            complex_gbsa = GbsaInteraction(pdb_id)
+        except ProcessingError:
+            print(f"Issue with processing {pdb_id}")
+            exit()
+
+    today = date.today()
+    current_time = time.strftime("%H:%M:%S", time.localtime())
+    print("FINISHED PROCESSING\n" + str(current_time))
