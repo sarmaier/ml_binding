@@ -11,6 +11,9 @@ from xyz2mol import xyz2mol, read_xyz_file
 np.set_printoptions(threshold=sys.maxsize)
 
 
+class ProcessingError(Exception):
+    pass
+
 def get_molecule_properties(filename):
     a_num, charge, xyz_coord = read_xyz_file(filename)
     charged_fragments = True
@@ -22,22 +25,23 @@ def get_molecule_properties(filename):
 
 def extract_single_property(regex_pattern, xtb_str, default=0.0):
     match = re.search(regex_pattern, xtb_str)
+    print(match)
     return float(match.group(1)) if match else default
 
 
 def extract_xtb_features(xtb_str):
     properties = [
-        extract_single_property(r'\(HOMO\):\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'\(LUMO\):\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'TOTAL ENERGY\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'GRADIENT NORM\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'HOMO-LUMO GAP\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'isotropic ES\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'anisotropic ES\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'anisotropic XC\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'dispersion\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'repulsion energy\s*:\s*([\d.-]+)', xtb_str),
-        extract_single_property(r'molecular quadrupole\s*:\s*([\d.-]+)', xtb_str)
+        extract_single_property(r'(-?\d+?\.\d+)\s+\(HOMO\)', xtb_str),
+        extract_single_property(r'(-?\d+?\.\d+)\s+\(LUMO\)', xtb_str),
+        extract_single_property(r'TOTAL ENERGY\s+(-?\d+?\.\d+)\s+?Eh', xtb_str),
+        extract_single_property(r'GRADIENT NORM\s+(-?\d+?\.\d+)\s+?Eh', xtb_str),
+        extract_single_property(r'HOMO-LUMO GAP\s+(-?\d+?\.\d+)\s+?eV', xtb_str),
+        extract_single_property(r'-> isotropic ES\s+(-?\d+?\.\d+)\s+?Eh', xtb_str),
+        extract_single_property(r'-> anisotropic ES\s+(-?\d+?\.\d+)\s+?Eh', xtb_str),
+        extract_single_property(r'-> anisotropic XC\s+(-?\d+?\.\d+)\s+?Eh', xtb_str),
+        extract_single_property(r'-> dispersion\s+(-?\d+\.\d+?)\s+?Eh', xtb_str),
+        extract_single_property(r'repulsion energy\s+(-?\d+?\.\d+)\s+?Eh', xtb_str),
+        extract_single_property(r'(-?\d+?\.\d+)\nmolecular quadrupole \(traceless\)', xtb_str)
     ]
     return np.array(properties)
 
@@ -77,12 +81,13 @@ if __name__ == '__main__':
             assert os.path.isfile(f"{pdb_id}_ligand_xtb2.out")
             present_pdb_ids.append(pdb_id)
         except AssertionError:
+            print("Required files not found in path")
             pass
 
     for pdb_id in present_pdb_ids:
         try:
             complex_gbsa = LigandBlock(pdb_id)
-        except Exception:
+        except ProcessingError:
             print(f"Issue with processing {pdb_id}")
             exit()
 
