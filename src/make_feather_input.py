@@ -1,21 +1,15 @@
 import glob
 import numpy as np
 import pandas as pd
-import json
+import json_numpy
 import networkx as nx
 from sklearn.model_selection import train_test_split
-
-
-# Function to save data as a json
-def make_json(name, info):
-    with open(name + '.json', 'w') as json_out:
-        json.dump(info, json_out)
 
 
 # Function to load data from a pickle
 def load_json(name):
     with open(name, 'r') as file:
-        return json.load(file)
+        return json_numpy.load(file)
 
 
 # Function to calculate mean and standard deviation of node attributes
