@@ -13,7 +13,7 @@ def make_json(name, info):
 
 
 if __name__ == "__main__":
-    pdb_ids = [x.split("_ligand.xyz")[0] for x in glob.glob("3nkk_ligand.xyz")]
+    pdb_ids = [x.split("_ligand.xyz")[0] for x in glob.glob("*_ligand.xyz")]
     edges_dict, adjacency_dict, nodes_dict = {}, {}, {}
 
     for pdb_id in pdb_ids:
@@ -30,6 +30,6 @@ if __name__ == "__main__":
             logging.error(f"Error processing {pdb_id}: {str(e)}")
             exit()
     today = date.today()
-    make_json('numpy_adjacency_' + str(today), adjacency_dict)
-    make_json('numpy_edges_' + str(today), edges_dict)
-    make_json('numpy_nodes_' + str(today), nodes_dict)
+    make_json('numpy_adjacency', adjacency_dict)
+    make_json('numpy_edges', edges_dict)
+    make_json('numpy_nodes', nodes_dict)
