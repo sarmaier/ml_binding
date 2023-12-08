@@ -49,8 +49,9 @@ class ProcessingError(Exception):
 
 class LigandBlock:
     def __init__(self, pdb_id):
-        xyz_file = f"{pdb_id}_ligand.xyz"
-        xtb_file = f"{pdb_id}_ligand_xtb2.out"
+        my_dir = os.getcwd()
+        xyz_file = my_dir + f"/{pdb_id}_ligand.xyz"
+        xtb_file = my_dir + f"/{pdb_id}_ligand_xtb2.out"
 
         mol = get_molecule_properties(xyz_file)
         rdkit_features = np.array([

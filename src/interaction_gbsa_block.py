@@ -57,8 +57,9 @@ class ProcessingError(Exception):
 
 class GbsaInteraction:
     def __init__(self, _id):
-        int_string = open("FINAL_RESULTS_MMGBSA_per_residue_" + _id + "_interaction.txt").read()
-        pdb_list = open(_id + "_complex.pdb", "r").read().split('\n')
+        my_dir = os.getcwd()
+        int_string = open(my_dir + "/FINAL_RESULTS_MMGBSA_per_residue_" + _id + "_interaction.txt").read()
+        pdb_list = open(my_dir + "/" + _id + "_complex.pdb", "r").read().split('\n')
         self.int = parse_pairwise(int_string)
         self.ca_coord, self.alpha_dist = alpha_c_distance(pdb_list)
         self.n_ca = len(list(self.alpha_dist))

@@ -1,4 +1,6 @@
-import glob
+import os
+import sys
+import subprocess
 import numpy as np
 import pandas as pd
 import json_numpy
@@ -49,6 +51,11 @@ def make_csv(_pdb_id, graph):
 
 # Main functionality
 if __name__ == "__main__":
+    py_dir = os.path.dirname(os.path.abspath(sys.argv[0])) # src/ directory
+    my_dir = os.getcwd()
+
+    cmd = ["python", py_dir + "/build_np_graphs.py"]
+    subprocess.Popen(cmd).wait()
     adjacency = load_json("numpy_adjacency.json")
     nodes = load_json("numpy_nodes.json")
 

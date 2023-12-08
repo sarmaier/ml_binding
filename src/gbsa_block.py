@@ -18,7 +18,8 @@ class ProcessingError(Exception):
 
 class GbsaComplexBlock():
     def __init__(self, id):
-        interaction_string = open(f"FINAL_RESULTS_MMGBSA_{id}.dat").read()
+        my_dir = os.getcwd()
+        interaction_string = open(my_dir + f"/FINAL_RESULTS_MMGBSA_{id}.dat").read()
         delta = parse_gbsa_block(interaction_string, "Differences", "\n\n------")
         ligand = parse_gbsa_block(interaction_string, "Ligand:", "Difference")
         receptor = parse_gbsa_block(interaction_string, "Receptor:", "Ligand:")
