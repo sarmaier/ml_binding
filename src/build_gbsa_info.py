@@ -26,6 +26,7 @@ if __name__ == "__main__":
     my_dir = os.getcwd()  # current directory
     pdb_paths = [x for x in glob.glob(my_dir + "/5drr*_ligand.xyz")]
     pdb_ids = [os.path.split(path_name)[1].split("_ligand.xyz")[0] for path_name in pdb_paths]
+    ligand_dict, complex_dict = {}, {}
     edges_dict, adjacency_dict, nodes_dict = {}, {}, {}
 
     for pdb_id in pdb_ids:
@@ -33,14 +34,14 @@ if __name__ == "__main__":
         try:
             ligand_block = LigandBlock(pdb_id)
             ligand_features = ligand_block.ligand_features
+            ligand_dict[pdb_id] = ligand_features
         except GenInfoError as e:
             print("Error caught with ligand_block for PDB ID-->" + pdb_id + ": ", e.message)
             exit()
         try:
             gbsa_block = GbsaComplexBlock(pdb_id)
             complex_features = gbsa_block.bind_properties
-            print(len(complex_features))
-            exit()
+            complex_dict[pdb_id] = complex_features
         except GenInfoError as e:
             print("Error caught with complex_block for PDB ID-->" + pdb_id + ": ", e.message)
             exit()
@@ -49,12 +50,14 @@ if __name__ == "__main__":
             edges_dict[pdb_id] = interaction_block.edges
             adjacency_dict[pdb_id] = interaction_block.adjacency
             nodes_dict[pdb_id] = interaction_block.nodes
-
         except GenInfoError as e:
             print("Error caught with interaction_block for PDB ID-->" + pdb_id + ": ", e.message)
             exit()
 
     today = date.today()
+    make_json('ligand_features', ligand_dict)
+    make_json('complex_features', complex_dict)
     make_json('numpy_adjacency', adjacency_dict)
     make_json('numpy_edges', edges_dict)
     make_json('numpy_nodes', nodes_dict)
+
