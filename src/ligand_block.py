@@ -22,7 +22,6 @@ def get_molecule_properties(filename):
 
 def extract_single_property(regex_pattern, xtb_str, default=0.0):
     match = re.search(regex_pattern, xtb_str)
-    print(match)
     return float(match.group(1)) if match else default
 
 

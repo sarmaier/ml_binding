@@ -46,6 +46,7 @@ def parse_pairwise(str_):
         else:
             x[1] = re.sub(r"\s+", "_", x[1])
     _ = [y[0:2] + y[5::3] for y in _ if y]
+#    _ = [x[:3] + [x[-1]] for x in _] #TEST, just vdw and total
     parsed_str = [[round(float(x), 4) if '.' in x else x.lower() for x in y] for y in _]
     parsed_int = {x[0]: aa[x[0].split("_")[0]] + x[2:] for x in parsed_str}
     return parsed_int
