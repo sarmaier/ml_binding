@@ -73,7 +73,7 @@ if __name__ == "__main__":
         for node in g.nodes:
             g.nodes[node]['feature_array'] = node_attributes[node]
         make_csv(pdb_id, g)
-        feather_cmd = ["python", "../FEATHER/src/main.py", "--ls graph-input", pdb_id + "_edges.csv", "--feature-input",
+        feather_cmd = ["python", "../FEATHER/src/main.py", "--graph-input", pdb_id + "_edges.csv", "--feature-input",
                        pdb_id + "_features.csv", "--output", pdb_id + "_output.csv", "--model-type", "FEATHER-G-att"]
         subprocess.Popen(feather_cmd).wait()
         print("FEATHER output for . . . " + pdb_id + " finished!")
