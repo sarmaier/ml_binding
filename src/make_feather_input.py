@@ -51,7 +51,8 @@ def make_csv(_pdb_id, graph):
 
 # Main functionality
 if __name__ == "__main__":
-    py_dir = os.path.dirname(os.path.abspath(sys.argv[0])) # src/ directory
+    # get src directory
+    py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     my_dir = os.getcwd()
 
     cmd = ["python", py_dir + "/build_gbsa_info.py"]
