@@ -54,7 +54,7 @@ if __name__ == "__main__":
     py_dir = os.path.dirname(os.path.abspath(sys.argv[0])) # src/ directory
     my_dir = os.getcwd()
 
-    cmd = ["python", py_dir + "/build_np_graphs.py"]
+    cmd = ["python", py_dir + "/build_gbsa_info.py"]
     subprocess.Popen(cmd).wait()
     adjacency = load_json("numpy_adjacency.json")
     nodes = load_json("numpy_nodes.json")
