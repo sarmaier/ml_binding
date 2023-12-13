@@ -54,7 +54,7 @@ if __name__ == "__main__":
     # get src directory
     py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     my_dir = os.getcwd()
-
+    # execute script to build necessary data files
     cmd = ["python", py_dir + "/build_gbsa_info.py"]
     subprocess.Popen(cmd).wait()
     adjacency = load_json("numpy_adjacency.json")
