@@ -49,19 +49,11 @@ def make_csv(_pdb_id, graph):
     features_pd.to_csv(_pdb_id + "_features.csv", index=False)
 
 
-def make_feather(_pdb_ids):
-    for _id in _pdb_ids:
-        print("Working on... " + str(_id))
-        normalized_nodes = normalize_nodes(nodes[_id], mean, std)
-        g = nx.from_numpy_array(adjacency[_id])
-        node_attributes = {idx: val for idx, val in enumerate(normalized_nodes, start=0)}
-        for node in g.nodes:
-            g.nodes[node]['feature_array'] = node_attributes[node]
-        make_csv(_id, g)
-        feather_cmd = ["python", "../FEATHER/src/main.py", "--graph-input", _id + "_edges.csv", "--feature-input",
-                       _id + "_features.csv", "--output", _id + "_output.csv", "--model-type", "FEATHER-G-att"]
-        subprocess.Popen(feather_cmd).wait()
-        print("FEATHER output for . . . " + _id + " finished!")
+def make_feather(_id):
+    feather_cmd = ["python", "../FEATHER/src/main.py", "--graph-input", _id + "_edges.csv", "--feature-input",
+                   _id + "_features.csv", "--output", pdb_id + "_output.csv", "--model-type", "FEATHER-G-att"]
+    subprocess.Popen(feather_cmd).wait()
+    print("FEATHER output for . . . " + _id + " finished!")
 
 
 # Main functionality
@@ -81,9 +73,15 @@ if __name__ == "__main__":
     nodes_train = {i: nodes[i] for i in train_pdb_ids}
     mean, std = get_mean_std(nodes_train)
 
-    # call function to make feather input
-    make_feather(list(nodes))
-
+    for pdb_id in nodes:
+        print("Working on... " + str(pdb_id))
+        normalized_nodes = normalize_nodes(nodes[pdb_id], mean, std)
+        g = nx.from_numpy_array(adjacency[pdb_id])
+        node_attributes = {idx: val for idx, val in enumerate(normalized_nodes, start=0)}
+        for node in g.nodes:
+            g.nodes[node]['feature_array'] = node_attributes[node]
+        make_csv(pdb_id, g)
+        make_feather(pdb_id)
 
     # combine features
     ligand_features = load_json("ligand_features.json")
