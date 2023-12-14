@@ -49,6 +49,21 @@ def make_csv(_pdb_id, graph):
     features_pd.to_csv(_pdb_id + "_features.csv", index=False)
 
 
+def make_feather(_pdb_ids):
+    for _id in _pdb_ids:
+        print("Working on... " + str(_id))
+        normalized_nodes = normalize_nodes(nodes[_id], mean, std)
+        g = nx.from_numpy_array(adjacency[_id])
+        node_attributes = {idx: val for idx, val in enumerate(normalized_nodes, start=0)}
+        for node in g.nodes:
+            g.nodes[node]['feature_array'] = node_attributes[node]
+        make_csv(_id, g)
+        feather_cmd = ["python", "../FEATHER/src/main.py", "--graph-input", _id + "_edges.csv", "--feature-input",
+                       _id + "_features.csv", "--output", _id + "_output.csv", "--model-type", "FEATHER-G-att"]
+        subprocess.Popen(feather_cmd).wait()
+        print("FEATHER output for . . . " + _id + " finished!")
+
+
 # Main functionality
 if __name__ == "__main__":
     # get src directory
@@ -61,27 +76,16 @@ if __name__ == "__main__":
     nodes = load_json("numpy_nodes.json")
 
     # Splitting dataset into train and test
-    train_pdb_ids, test_pdb_ids = train_test_split(list(adjacency), train_size=0.9)
+    train_pdb_ids, test_pdb_ids = train_test_split(list(adjacency), train_size=0.9, random_state=42)
     adjacency_train = {i: adjacency[i] for i in train_pdb_ids}
     nodes_train = {i: nodes[i] for i in train_pdb_ids}
     mean, std = get_mean_std(nodes_train)
 
-    for pdb_id in nodes:
-        print("Working on... " + str(pdb_id))
-        normalized_nodes = normalize_nodes(nodes[pdb_id], mean, std)
-        g = nx.from_numpy_array(adjacency[pdb_id])
-        node_attributes = {idx: val for idx, val in enumerate(normalized_nodes, start=0)}
-        for node in g.nodes:
-            g.nodes[node]['feature_array'] = node_attributes[node]
-        make_csv(pdb_id, g)
-        feather_cmd = ["python", "../FEATHER/src/main.py", "--graph-input", pdb_id + "_edges.csv", "--feature-input",
-                       pdb_id + "_features.csv", "--output", pdb_id + "_output.csv", "--model-type", "FEATHER-G-att"]
-        subprocess.Popen(feather_cmd).wait()
-        print("FEATHER output for . . . " + pdb_id + " finished!")
+    # call function to make feather input
+    make_feather(list(nodes))
 
-    py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-    my_dir = os.getcwd()
-    # execute script to build necessary data files
+
+    # combine features
     ligand_features = load_json("ligand_features.json")
     complex_features = load_json("complex_features.json")
     pdb_ids = [x for x in ligand_features]
