@@ -35,16 +35,14 @@ if __name__ == "__main__":
             ligand_block = LigandBlock(pdb_id)
             ligand_features = ligand_block.ligand_features
             ligand_dict[pdb_id] = ligand_features
-        except GenInfoError as e:
-            print("Error caught with ligand_block for PDB ID-->" + pdb_id + ": ", e.message)
-            exit()
+        except Exception:
+            ligand_dict[pdb_id] = ['None']
         try:
             gbsa_block = GbsaComplexBlock(pdb_id)
             complex_features = gbsa_block.bind_properties
             complex_dict[pdb_id] = complex_features
-        except GenInfoError as e:
-            print("Error caught with complex_block for PDB ID-->" + pdb_id + ": ", e.message)
-            exit()
+        except Exception:
+            complex_dict[pdb_id] = ['None']
         try:
             interaction_block = GbsaInteraction(pdb_id)
             edges_dict[pdb_id] = interaction_block.edges
@@ -60,4 +58,5 @@ if __name__ == "__main__":
     make_json('numpy_adjacency', adjacency_dict)
     make_json('numpy_edges', edges_dict)
     make_json('numpy_nodes', nodes_dict)
+
 

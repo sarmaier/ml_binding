@@ -20,6 +20,8 @@ def get_molecule_properties(filename):
     return mol_object
 
 
+
+
 def extract_single_property(regex_pattern, xtb_str, default=0.0):
     match = re.search(regex_pattern, xtb_str)
     return float(match.group(1)) if match else default
@@ -51,19 +53,21 @@ class LigandBlock:
         my_dir = os.getcwd()
         xyz_file = my_dir + f"/{pdb_id}_ligand.xyz"
         xtb_file = my_dir + f"/{pdb_id}_ligand_xtb2.out"
-
         mol = get_molecule_properties(xyz_file)
-        rdkit_features = np.array([
-            Lipinski.NumHAcceptors(mol),
-            Lipinski.NumHDonors(mol),
-            Lipinski.NumRotatableBonds(mol),
-            Lipinski.NumAliphaticRings(mol),
-            Lipinski.NumAromaticRings(mol),
-            rdMolDescriptors.CalcExactMolWt(mol)
-        ]).astype(float)
+        if mol != "None":
+            rdkit_features = np.array([
+                Lipinski.NumHAcceptors(mol),
+                Lipinski.NumHDonors(mol),
+                Lipinski.NumRotatableBonds(mol),
+                Lipinski.NumAliphaticRings(mol),
+                Lipinski.NumAromaticRings(mol),
+                rdMolDescriptors.CalcExactMolWt(mol)
+            ]).astype(float)
 
-        xtb_features = extract_xtb_features(open(xtb_file, "r").read())
-        self.ligand_features = np.concatenate((rdkit_features, xtb_features), axis=0)
+            xtb_features = extract_xtb_features(open(xtb_file, "r").read())
+            self.ligand_features = np.concatenate((rdkit_features, xtb_features), axis=0)
+        else:
+            self.ligand_features = ["None"]
 
 
 if __name__ == '__main__':
@@ -71,7 +75,6 @@ if __name__ == '__main__':
     parser.add_argument("PDB_ID")
     args = parser.parse_args()
     pdb_ids = [getattr(args, arg) for arg in vars(args)]
-    print(pdb_ids)
     present_pdb_ids = []
     for pdb_id in pdb_ids:
         try:
@@ -88,7 +91,7 @@ if __name__ == '__main__':
     for pdb_id in present_pdb_ids:
         try:
             complex_gbsa = LigandBlock(pdb_id)
-        except ProcessingError:
+        except Exception:
             print(f"Issue with processing {pdb_id}")
             exit()
 
