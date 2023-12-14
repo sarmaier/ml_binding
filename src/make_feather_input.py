@@ -68,8 +68,8 @@ if __name__ == "__main__":
 
     for pdb_id in nodes:
         print("Working on... " + str(pdb_id))
-        normalized_nodes = normalize_nodes(nodes_train[pdb_id], mean, std)
-        g = nx.from_numpy_array(adjacency_train[pdb_id])
+        normalized_nodes = normalize_nodes(nodes[pdb_id], mean, std)
+        g = nx.from_numpy_array(adjacency[pdb_id])
         node_attributes = {idx: val for idx, val in enumerate(normalized_nodes, start=0)}
         for node in g.nodes:
             g.nodes[node]['feature_array'] = node_attributes[node]
