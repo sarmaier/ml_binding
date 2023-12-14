@@ -64,9 +64,9 @@ if __name__ == "__main__":
     train_pdb_ids, test_pdb_ids = train_test_split(list(adjacency), train_size=0.9)
     adjacency_train = {i: adjacency[i] for i in train_pdb_ids}
     nodes_train = {i: nodes[i] for i in train_pdb_ids}
-
     mean, std = get_mean_std(nodes_train)
-    for pdb_id in nodes_train:
+
+    for pdb_id in nodes:
         print("Working on... " + str(pdb_id))
         normalized_nodes = normalize_nodes(nodes_train[pdb_id], mean, std)
         g = nx.from_numpy_array(adjacency_train[pdb_id])
@@ -78,3 +78,10 @@ if __name__ == "__main__":
                        pdb_id + "_features.csv", "--output", pdb_id + "_output.csv", "--model-type", "FEATHER-G-att"]
         subprocess.Popen(feather_cmd).wait()
         print("FEATHER output for . . . " + pdb_id + " finished!")
+
+    py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    my_dir = os.getcwd()
+    # execute script to build necessary data files
+    ligand_features = load_json("ligand_features.json")
+    complex_features = load_json("complex_features.json")
+    pdb_ids = [x for x in ligand_features]
