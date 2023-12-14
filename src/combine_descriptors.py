@@ -86,4 +86,5 @@ if __name__ == "__main__":
     # combine features
     ligand_features = load_json("ligand_features.json")
     complex_features = load_json("complex_features.json")
-    pdb_ids = [x for x in ligand_features]
+    for pdb_id in ligand_features:
+        print(pdb_id)
