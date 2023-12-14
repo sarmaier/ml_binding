@@ -8,7 +8,7 @@ import networkx as nx
 from sklearn.model_selection import train_test_split
 
 
-# Function to load data from a pickle
+# Function to load data from a json
 def load_json(name):
     with open(name, 'r') as file:
         return json_numpy.load(file)
