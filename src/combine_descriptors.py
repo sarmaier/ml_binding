@@ -87,4 +87,11 @@ if __name__ == "__main__":
     ligand_features = load_json("ligand_features.json")
     complex_features = load_json("complex_features.json")
     for pdb_id in ligand_features:
-        print(pdb_id)
+        complex_vec = complex_features[pdb_id]
+        ligand_vec = ligand_features[pdb_id]
+        feather_df = pd.read_csv(pdb_id + "_output.csv")
+        feather_vec = feather_df.to_numpy()
+        joined_vec = np.concatenate((complex_vec, ligand_vec, feather_vec), axis=1)
+        print(joined_vec.shape)
+
+
