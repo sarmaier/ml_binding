@@ -3,8 +3,8 @@ from datetime import date
 import glob
 import json_numpy
 from ligand_block import LigandBlock
-from gbsa_block import GbsaComplexBlock
-from interaction_gbsa_block import GbsaInteraction
+from complex_block import GbsaComplexBlock
+from pairwise_block import GbsaInteraction
 import logging
 
 logging.basicConfig(filename='processing_logs.log', level=logging.ERROR)
