@@ -14,6 +14,11 @@ def load_json(name):
         return json_numpy.load(file)
 
 
+def make_json(name, data):
+    with open(name + '.json', 'w') as json_out:
+        json_numpy.dump(data, json_out)
+
+
 # Function to calculate mean and standard deviation of node attributes
 def get_mean_std(node_dictionary):
     labels = {0: 'vdw', 1: 'electrostatic', 2: 'polar_solv', 3: 'nonpolar_solv', 4: 'total', 5: 'ca_distance'}
@@ -39,7 +44,7 @@ def normalize_nodes(array, means, stds):
 
 
 # Function to create CSV files for edges and features
-def make_csv(_pdb_id, graph):
+def make_feather_input(_pdb_id, graph):
     e = graph.edges
     features = np.array([graph.nodes[_node]['feature_array'] for _node in graph.nodes])
     n_features = len(graph.nodes[0]['feature_array'])
@@ -69,7 +74,8 @@ if __name__ == "__main__":
 
     # Splitting dataset into train and test
     train_pdb_ids, test_pdb_ids = train_test_split(list(adjacency), train_size=0.9, random_state=42)
-    adjacency_train = {i: adjacency[i] for i in train_pdb_ids}
+    make_json("pdb_ids_train", train_pdb_ids)
+    # Get mean and standard deviation from training data
     nodes_train = {i: nodes[i] for i in train_pdb_ids}
     mean, std = get_mean_std(nodes_train)
 
@@ -80,18 +86,27 @@ if __name__ == "__main__":
         node_attributes = {idx: val for idx, val in enumerate(normalized_nodes, start=0)}
         for node in g.nodes:
             g.nodes[node]['feature_array'] = node_attributes[node]
-        make_csv(pdb_id, g)
+        make_feather_input(pdb_id, g)
         make_feather(pdb_id)
 
     # combine features
     ligand_features = load_json("ligand_features.json")
     complex_features = load_json("complex_features.json")
+    joined_features = {}
+    no_pairwise_features = {}
     for pdb_id in ligand_features:
         complex_vec = complex_features[pdb_id]
         ligand_vec = ligand_features[pdb_id]
         feather_df = pd.read_csv(pdb_id + "_output.csv")
         feather_vec = feather_df.to_numpy()
+
+        no_pairwise_vec = np.concatenate((complex_vec, ligand_vec), axis=1)
+        no_pairwise_features[pdb_id] = no_pairwise_vec
+
         joined_vec = np.concatenate((complex_vec, ligand_vec, feather_vec), axis=1)
-        print(joined_vec.shape)
+        joined_features[pdb_id] = joined_vec
+    make_json("all_features", joined_features)
+    make_json("no_pairwise_features", no_pairwise_features)
+
 
 
