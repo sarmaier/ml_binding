@@ -65,7 +65,7 @@ class LigandBlock:
             ]).astype(float)
 
             xtb_features = extract_xtb_features(open(xtb_file, "r").read())
-            self.ligand_features = np.concatenate((rdkit_features, xtb_features), axis=0)
+            self.ligand_features = np.concatenate((rdkit_features, xtb_features), axis=0).reshape((1, 17))
         else:
             self.ligand_features = ["None"]
 
