@@ -29,7 +29,7 @@ class GbsaComplexBlock():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("PDB_ID", help="PDB ID of the molecule")=
+    parser.add_argument("PDB_ID", help="PDB ID of the molecule")
     args = parser.parse_args()
 
     pdb_id = args.PDB_ID
