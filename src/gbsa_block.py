@@ -24,12 +24,12 @@ class GbsaComplexBlock():
         ligand = parse_gbsa_block(interaction_string, "Ligand:", "\n\nDifference")
         receptor = parse_gbsa_block(interaction_string, "Receptor:", "\n\nLigand:")
         comp = parse_gbsa_block(interaction_string, "Complex:", "\n\nReceptor:")
-        self.bind_properties = np.array(delta + ligand + receptor + comp)
+        self.bind_properties = np.array(delta + ligand + receptor + comp).reshape((1, 20))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("PDB_ID", help="PDB ID of the molecule")
+    parser.add_argument("PDB_ID", help="PDB ID of the molecule")=
     args = parser.parse_args()
 
     pdb_id = args.PDB_ID
