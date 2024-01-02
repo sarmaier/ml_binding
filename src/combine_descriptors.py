@@ -99,12 +99,14 @@ if __name__ == "__main__":
         ligand_vec = ligand_features[pdb_id]
         feather_df = pd.read_csv(pdb_id + "_output.csv")
         feather_vec = feather_df.to_numpy()
+        if ligand_features != ["None"]:
+            no_pairwise_vec = np.concatenate((complex_vec, ligand_vec), axis=1)
+            no_pairwise_features[pdb_id] = no_pairwise_vec
 
-        no_pairwise_vec = np.concatenate((complex_vec, ligand_vec), axis=1)
-        no_pairwise_features[pdb_id] = no_pairwise_vec
-
-        joined_vec = np.concatenate((complex_vec, ligand_vec, feather_vec), axis=1)
-        joined_features[pdb_id] = joined_vec
+            joined_vec = np.concatenate((complex_vec, ligand_vec, feather_vec), axis=1)
+            joined_features[pdb_id] = joined_vec
+        else:
+            pass
     make_json("all_features", joined_features)
     make_json("no_pairwise_features", no_pairwise_features)
 
