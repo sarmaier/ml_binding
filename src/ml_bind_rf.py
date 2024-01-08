@@ -3,6 +3,11 @@ import sys
 from datetime import date
 import glob
 import json_numpy
+import pandas as pd
+import sklearn
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score, make_scorer, mean_absolute_error
+
 import logging
 
 
