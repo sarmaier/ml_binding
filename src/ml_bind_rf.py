@@ -23,6 +23,20 @@ def train_rf(train_x, train_y):
     return trained_model
 
 
+def evaluate_rf(trained_model, test_x, test_y):
+    """
+    get mean absolute error (MAE),
+    get root mean squared error (RMSE),
+    get coefficient of determination (R^2)
+    """
+    pred = trained_model.predict(test_x)
+    mae = mean_absolute_error(test_y, pred)
+    rmse = mean_squared_error(test_y, pred, squared=False)
+    r2 = r2_score(test_y, pred)
+
+    return mae, rmse, r2
+
+
 if __name__ == "__main__":
     # get src directory
     py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
