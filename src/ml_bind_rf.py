@@ -42,6 +42,27 @@ def evaluate_rf(trained_model, test_x, test_y):
     return mae, rmse, r2
 
 
+def run_model():
+    """
+    loads the datasets, trains the RF model, and predicts the pKas for
+    test split, sampl6, and novartis
+    """
+
+    # load the datasets
+
+    # get features and exp_pKa of datasets
+
+    # train random forest model
+
+    # trained_model = train_rf(train_x, train_y)
+
+    # evaluate trained model on test sets
+
+    # test_mae, test_rmse, test_r2 = evaluate_rf(trained_model, test_x, test_y)
+
+    return
+
+
 if __name__ == "__main__":
     # get src directory
     py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
