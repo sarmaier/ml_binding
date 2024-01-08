@@ -12,6 +12,17 @@ def load_json(name):
         return json_numpy.load(file)
 
 
+def train_rf(train_x, train_y):
+    """
+    train random forest model
+    """
+    rf = RandomForestRegressor(n_estimators=2000, max_features=0.5, max_depth=40, min_samples_split=2,
+                               min_samples_leaf=2, random_state=42)
+    trained_model = rf.fit(train_x, train_y)
+
+    return trained_model
+
+
 if __name__ == "__main__":
     # get src directory
     py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
