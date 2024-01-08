@@ -20,8 +20,6 @@ def get_molecule_properties(filename):
     return mol_object
 
 
-
-
 def extract_single_property(regex_pattern, xtb_str, default=0.0):
     match = re.search(regex_pattern, xtb_str)
     return float(match.group(1)) if match else default
@@ -42,10 +40,6 @@ def extract_xtb_features(xtb_str):
         extract_single_property(r'(-?\d+?\.\d+)\nmolecular quadrupole \(traceless\)', xtb_str)
     ]
     return np.array(properties)
-
-
-class ProcessingError(Exception):
-    pass
 
 
 class LigandBlock:
