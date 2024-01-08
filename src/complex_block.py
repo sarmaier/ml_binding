@@ -12,9 +12,6 @@ def parse_gbsa_block(str_, start_keyword, end_keyword):
     return block[:4] + block[6:]
 
 
-class ProcessingError(Exception):
-    pass
-
 
 class GbsaComplexBlock():
     def __init__(self, id):
@@ -38,7 +35,7 @@ if __name__ == '__main__':
     else:
         try:
             complex_gbsa = GbsaComplexBlock(pdb_id)
-        except ProcessingError:
+        except Exception:
             print(f"Issue with processing {pdb_id}")
             exit()
 
