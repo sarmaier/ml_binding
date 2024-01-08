@@ -15,12 +15,15 @@ def parse_gbsa_block(str_, start_keyword, end_keyword):
 class GbsaComplexBlock():
     def __init__(self, id):
         my_dir = os.getcwd()
-        interaction_string = open(my_dir + f"/FINAL_RESULTS_MMGBSA_{id}.dat").read()
-        delta = parse_gbsa_block(interaction_string, "Differences \(Complex - Receptor - Ligand\):", "\n\n------")
-        ligand = parse_gbsa_block(interaction_string, "Ligand:", "\n\nDifference")
-        receptor = parse_gbsa_block(interaction_string, "Receptor:", "\n\nLigand:")
-        comp = parse_gbsa_block(interaction_string, "Complex:", "\n\nReceptor:")
-        self.bind_properties = np.array(delta + ligand + receptor + comp).reshape((1, 20))
+        try:
+            interaction_string = open(my_dir + f"/FINAL_RESULTS_MMGBSA_{id}.dat").read()
+            delta = parse_gbsa_block(interaction_string, "Differences \(Complex - Receptor - Ligand\):", "\n\n------")
+            ligand = parse_gbsa_block(interaction_string, "Ligand:", "\n\nDifference")
+            receptor = parse_gbsa_block(interaction_string, "Receptor:", "\n\nLigand:")
+            comp = parse_gbsa_block(interaction_string, "Complex:", "\n\nReceptor:")
+            self.bind_properties = np.array(delta + ligand + receptor + comp).reshape((1, 20))
+        except Exception:
+            self.bind_properties = ["None"]
 
 
 if __name__ == '__main__':
