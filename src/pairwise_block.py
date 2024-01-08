@@ -52,10 +52,6 @@ def parse_pairwise(str_):
     return parsed_int
 
 
-class ProcessingError(Exception):
-    pass
-
-
 class GbsaInteraction:
     def __init__(self, _id):
         my_dir = os.getcwd()
@@ -123,7 +119,7 @@ if __name__ == '__main__':
     else:
         try:
             complex_gbsa = GbsaInteraction(pdb_id)
-        except ProcessingError:
+        except Exception:
             print(f"Issue with processing {pdb_id}")
             exit()
 

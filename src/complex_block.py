@@ -12,7 +12,6 @@ def parse_gbsa_block(str_, start_keyword, end_keyword):
     return block[:4] + block[6:]
 
 
-
 class GbsaComplexBlock():
     def __init__(self, id):
         my_dir = os.getcwd()
