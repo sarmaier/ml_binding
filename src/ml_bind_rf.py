@@ -17,9 +17,9 @@ if __name__ == "__main__":
     py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     my_dir = os.getcwd()
     # execute script to build necessary data files
-    ligand_features = load_json("ligand_features.json")
-    complex_features = load_json("complex_features.json")
-    pdb_ids = [x for x in ligand_features]
+    pairwise_features = load_json("all_features.json")
+    non_pairwise_features = load_json("no_pairwise_features.json")
+
 
     exit()
 
