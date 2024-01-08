@@ -27,7 +27,7 @@ if __name__ == "__main__":
     pdb_paths = [x for x in glob.glob(my_dir + "/*_ligand.xyz")]
     pdb_ids = [os.path.split(path_name)[1].split("_ligand.xyz")[0] for path_name in pdb_paths]
     ligand_dict, complex_dict = {}, {}
-    edges_dict, adjacency_dict, nodes_dict, persistence_dict = {}, {}, {}
+    edges_dict, adjacency_dict, nodes_dict, persistence_dict = {}, {}, {}, {}
 
     for pdb_id in pdb_ids:
         print("Working on... " + str(pdb_id))
