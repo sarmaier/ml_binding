@@ -19,7 +19,7 @@ def get_molecule_properties(filename):
         huckel = False
         mol_object = xyz2mol(a_num, charge, xyz_coord, charged_fragments, quick, huckel)
     except Exception:
-        mol_object = 'None'
+        mol_object = None
     return mol_object
 
 
@@ -51,7 +51,7 @@ class LigandBlock:
         xyz_file = my_dir + f"/{pdb_id}_ligand.xyz"
         xtb_file = my_dir + f"/{pdb_id}_ligand_xtb2.out"
         mol = get_molecule_properties(xyz_file)
-        if mol != "None":
+        if mol != None:
             rdkit_features = np.array([
                 Lipinski.NumHAcceptors(mol),
                 Lipinski.NumHDonors(mol),
@@ -64,7 +64,7 @@ class LigandBlock:
             xtb_features = extract_xtb_features(open(xtb_file, "r").read())
             self.ligand_features = np.concatenate((rdkit_features, xtb_features), axis=0).reshape((1, 17))
         else:
-            self.ligand_features = ["None"]
+            self.ligand_features = [None]
 
 
 if __name__ == '__main__':

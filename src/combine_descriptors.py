@@ -71,7 +71,6 @@ if __name__ == "__main__":
     subprocess.Popen(cmd).wait()
     adjacency = load_json("numpy_adjacency.json")
     nodes = load_json("numpy_nodes.json")
-    exit()
 
     # Splitting dataset into train and test
     train_pdb_ids, test_pdb_ids = train_test_split(list(adjacency), train_size=0.9, random_state=42)
@@ -100,8 +99,11 @@ if __name__ == "__main__":
         ligand_vec = ligand_features[pdb_id]
         feather_df = pd.read_csv(pdb_id + "_output.csv")
         feather_vec = feather_df.to_numpy()
-        if ligand_features != ["None"]:
-            print(complex.vec.shape, ligand_vec.shape)
+        if len(ligand_vec) > 1 and len(complex_vec) > 1:
+
+            print(pdb_id)
+            print(ligand_vec)
+
             no_pairwise_vec = np.concatenate((complex_vec, ligand_vec), axis=1)
             no_pairwise_features[pdb_id] = no_pairwise_vec
 

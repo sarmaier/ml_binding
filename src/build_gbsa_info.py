@@ -26,7 +26,6 @@ if __name__ == "__main__":
     my_dir = os.getcwd()  # current directory
     pdb_paths = [x for x in glob.glob(my_dir + "/*_ligand.xyz")]
     pdb_ids = [os.path.split(path_name)[1].split("_ligand.xyz")[0] for path_name in pdb_paths]
-    pdb_ids = [x for x in pdb_ids if x.startswith('3')]
     ligand_dict, complex_dict = {}, {}
     edges_dict, adjacency_dict, nodes_dict, persistence_dict = {}, {}, {}, {}
 

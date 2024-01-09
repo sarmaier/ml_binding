@@ -23,7 +23,7 @@ class GbsaComplexBlock():
             comp = parse_gbsa_block(interaction_string, "Complex:", "\n\nReceptor:")
             self.bind_properties = np.array(delta + ligand + receptor + comp).reshape((1, 20))
         except Exception:
-            self.bind_properties = ["None"]
+            self.bind_properties = [None]
 
 
 if __name__ == '__main__':
