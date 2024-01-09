@@ -71,6 +71,7 @@ if __name__ == "__main__":
     subprocess.Popen(cmd).wait()
     adjacency = load_json("numpy_adjacency.json")
     nodes = load_json("numpy_nodes.json")
+    exit()
 
     # Splitting dataset into train and test
     train_pdb_ids, test_pdb_ids = train_test_split(list(adjacency), train_size=0.9, random_state=42)

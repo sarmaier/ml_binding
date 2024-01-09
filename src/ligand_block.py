@@ -12,11 +12,14 @@ np.set_printoptions(threshold=sys.maxsize)
 
 
 def get_molecule_properties(filename):
-    a_num, charge, xyz_coord = read_xyz_file(filename)
-    charged_fragments = True
-    quick = True
-    huckel = False
-    mol_object = xyz2mol(a_num, charge, xyz_coord, charged_fragments, quick, huckel)
+    try:
+        a_num, charge, xyz_coord = read_xyz_file(filename)
+        charged_fragments = True
+        quick = True
+        huckel = False
+        mol_object = xyz2mol(a_num, charge, xyz_coord, charged_fragments, quick, huckel)
+    except Exception:
+        mol_object = 'None'
     return mol_object
 
 

@@ -53,11 +53,9 @@ def run_model():
     # get features and exp_pKa of datasets
 
     # train random forest model
-
     # trained_model = train_rf(train_x, train_y)
 
     # evaluate trained model on test sets
-
     # test_mae, test_rmse, test_r2 = evaluate_rf(trained_model, test_x, test_y)
 
     return
