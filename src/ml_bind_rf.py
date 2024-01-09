@@ -65,8 +65,12 @@ if __name__ == "__main__":
     # get src directory
     py_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     my_dir = os.getcwd()
+
     # execute script to build necessary data files
-    pairwise_features = load_json("all_features.json")
+    pairwise_features = load_json(my_dir + "/all_features.json")
+    print(pairwise_features)
+    print(len(pairwise_features))
+    exit()
     non_pairwise_features = load_json("no_pairwise_features.json")
 
 
