@@ -68,11 +68,11 @@ if __name__ == "__main__":
 
     # execute script to build necessary data files
     pairwise_features = load_json(my_dir + "/all_features.json")
-    print(pairwise_features)
-    print(len(pairwise_features))
-    exit()
+    for i in pairwise_features:
+        print(pairwise_features[i][0].shape)
     non_pairwise_features = load_json("no_pairwise_features.json")
 
 
     exit()
+
 

@@ -94,18 +94,22 @@ if __name__ == "__main__":
     complex_features = load_json("complex_features.json")
     joined_features = {}
     no_pairwise_features = {}
+
     for pdb_id in ligand_features:
         complex_vec = complex_features[pdb_id]
         ligand_vec = ligand_features[pdb_id]
-        feather_df = pd.read_csv(pdb_id + "_output.csv")
+        feather_df = pd.read_csv(pdb_id + "_output.csv").drop(columns=['id'])
         feather_vec = feather_df.to_numpy()
+
         if ligand_vec[0] is not None and complex_vec[0] is not None:
             no_pairwise_vec = np.concatenate((complex_vec, ligand_vec), axis=1)
             no_pairwise_features[pdb_id] = no_pairwise_vec
-
             joined_vec = np.concatenate((complex_vec, ligand_vec, feather_vec), axis=1)
             joined_features[pdb_id] = joined_vec
         else:
+            error_pdb = open("error_processing_01_09_24.txt", "a")
+            error_pdb.write(pdb_id + "\n")
+            error_pdb.close()
             pass
-    make_json("all_features", joined_features)
-    make_json("no_pairwise_features", no_pairwise_features)
+    make_json("all_features_01_10_24", joined_features)
+    make_json("no_pairwise_features_01_10_24", no_pairwise_features)
