@@ -47,7 +47,7 @@ def train_rf(train_x, train_y):
     """
     train random forest model
     """
-    rf = RandomForestRegressor(n_estimators=2000, max_features=0.5, max_depth=100, min_samples_split=2,
+    rf = RandomForestRegressor(n_estimators=2000, max_features=0.3, max_depth=50, min_samples_split=2,
                                min_samples_leaf=2, random_state=42)
     trained_model = rf.fit(train_x, train_y)
 
